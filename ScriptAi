@@ -1,0 +1,32 @@
+import os
+from openai import OpenAI
+
+# Paste your GitHub token inside the quotes below (only keep this file private on your phone!)
+GITHUB_TOKEN = "paste_your_github_token_here"
+
+client = OpenAI(
+    base_url="https://azure.com",
+    api_key=GITHUB_TOKEN,
+)
+
+SYSTEM_PROMPT = """
+You are an expert scripting assistant. Write clean, well-commented, and efficient code. 
+Always explain how the script works step-by-step and point out any potential bugs.
+"""
+
+print("Script Helper AI is ready! Type 'exit' to quit.\n")
+
+while True:
+    user_input = input("What script do you need help with? > ")
+    if user_input.lower() == "exit":
+        break
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_input},
+        ],
+    )
+
+    print("\nAI Response:\n" + response.choices[0].message.content + "\n" + "-"*40 + "\n")
